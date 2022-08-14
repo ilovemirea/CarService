@@ -1,4 +1,4 @@
-package ru.shuralev.carservice.model;
+package ru.shuralev.carservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -11,14 +11,21 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "CAR")
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class Car {
+public class Car implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5449326074498337967L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_id_generator")
+    @SequenceGenerator(name = "car_id_generator", sequenceName = "sq_car_id", allocationSize = 1)
     private Long id;
     private String model;
     private Integer horsepower;

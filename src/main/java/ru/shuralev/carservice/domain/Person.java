@@ -1,4 +1,4 @@
-package ru.shuralev.carservice.model;
+package ru.shuralev.carservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,6 +12,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -20,18 +22,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class Person {
+public class Person implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5449326074498337967L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_id_generator")
     @SequenceGenerator(name = "person_id_generator", sequenceName = "sq_person_id", allocationSize = 1)
     private Long id;
     private String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd")
     @JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
     @JsonSerialize(using = DateSerializer.class)
     private Date birthdate;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "person")
     private List<Car> cars;
 }

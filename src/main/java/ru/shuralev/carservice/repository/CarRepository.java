@@ -1,9 +1,16 @@
 package ru.shuralev.carservice.repository;
 
-import ru.shuralev.carservice.model.Car;
+import ru.shuralev.carservice.domain.Car;
 
-public interface CarRepository{
-    Car save (Car car);
+import java.util.List;
+
+public interface CarRepository {
+
+    List<Car> findAll();
+
+    Car save(Car car);
 
     void deleteAll();
+
+    boolean existsById(Long carId);
 }
