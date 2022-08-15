@@ -1,6 +1,6 @@
-package ru.shuralev.carservice.repository;
+package ru.shuralev.carservice.app.api.car;
 
-import ru.shuralev.carservice.domain.Car;
+import ru.shuralev.carservice.domain.car.Car;
 
 import java.util.List;
 

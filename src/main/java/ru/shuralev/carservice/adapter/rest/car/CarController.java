@@ -1,4 +1,4 @@
-package ru.shuralev.carservice.adapter.rest;
+package ru.shuralev.carservice.adapter.rest.car;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shuralev.carservice.service.CarService;
-import ru.shuralev.carservice.domain.Car;
+import ru.shuralev.carservice.app.api.car.CreateCar;
+import ru.shuralev.carservice.domain.car.Car;
 
 @RestController
 @RequestMapping("/cars")
 @RequiredArgsConstructor
 public class CarController {
-    private final CarService carService;
+    private final CreateCar createCar;
 
     @PostMapping("/car")
-    public ResponseEntity<String> addCar(@RequestBody Car car) {
+    public ResponseEntity<String> createCar(@RequestBody Car car) {
         try {
-            carService.addCar(car);
+            createCar.execute(car);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

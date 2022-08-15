@@ -1,9 +1,9 @@
-package ru.shuralev.carservice.adapter.persistence;
+package ru.shuralev.carservice.adapter.persistence.car;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.shuralev.carservice.domain.Car;
-import ru.shuralev.carservice.repository.CarRepository;
+import ru.shuralev.carservice.domain.car.Car;
+import ru.shuralev.carservice.app.api.car.CarRepository;
 
 import java.util.List;
 

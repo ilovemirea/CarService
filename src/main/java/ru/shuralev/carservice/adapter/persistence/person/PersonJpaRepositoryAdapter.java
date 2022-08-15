@@ -1,16 +1,22 @@
-package ru.shuralev.carservice.adapter.persistence;
+package ru.shuralev.carservice.adapter.persistence.person;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.shuralev.carservice.domain.Person;
-import ru.shuralev.carservice.repository.PersonRepository;
+import ru.shuralev.carservice.domain.person.Person;
+import ru.shuralev.carservice.app.api.person.PersonRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class PersonJpaRepositoryAdapter implements PersonRepository {
     private final PersonJpaRepository personJpaRepository;
+
+    @Override
+    public Optional<Person> findById(Long id) {
+        return personJpaRepository.findById(id);
+    }
 
     @Override
     public List<Person> findAll() {

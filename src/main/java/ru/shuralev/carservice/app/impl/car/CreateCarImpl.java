@@ -1,32 +1,34 @@
-package ru.shuralev.carservice.service.impl;
+package ru.shuralev.carservice.app.impl.car;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.shuralev.carservice.service.CarService;
+import ru.shuralev.carservice.domain.person.Person;
+import ru.shuralev.carservice.app.api.car.CreateCar;
 import ru.shuralev.carservice.validation.ValidationException;
-import ru.shuralev.carservice.domain.Car;
-import ru.shuralev.carservice.repository.CarRepository;
-import ru.shuralev.carservice.repository.PersonRepository;
+import ru.shuralev.carservice.domain.car.Car;
+import ru.shuralev.carservice.app.api.car.CarRepository;
+import ru.shuralev.carservice.app.api.person.PersonRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 
 @Component
 @RequiredArgsConstructor
-public class CarServiceImpl implements CarService {
+public class CreateCarImpl implements CreateCar {
     private final CarRepository carRepository;
     private final PersonRepository personRepository;
 
     @Transactional
     @Override
-    public void addCar(Car car) {
-        int horsepower = car.getHorsepower();
-        Date carOwnerBirthdate = car.getPerson().getBirthdate();
-        Long ownerId = car.getPerson().getId();
+    public void execute(Car car) {
         Long carId = car.getId();
+        Long ownerId = car.getPerson().getId();
+        Person carOwner = personRepository.findById(ownerId)
+                .orElseThrow(() -> new EntityNotFoundException("Could not find provided Person by id in the database"));
+        LocalDate carOwnerBirthdate = carOwner.getBirthdate();
+        Integer horsepower = car.getHorsepower();
 
         validateCarOwnerAge(carOwnerBirthdate);
         validateCarHorsepower(horsepower);
@@ -40,16 +42,15 @@ public class CarServiceImpl implements CarService {
     // = Implementation
     // ===================================================================================================================
 
-    private void validateCarHorsepower(int horsepower) {
+    private void validateCarHorsepower(Integer horsepower) {
         if (horsepower <= 0) {
             throw new ValidationException("Horsepower should be more than 0");
         }
     }
 
-    private void validateCarOwnerAge(Date birthdate) {
+    private void validateCarOwnerAge(LocalDate birthdate) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate date = birthdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int carOwnerAge = Period.between(currentDate, date).getYears();
+        long carOwnerAge = ChronoUnit.YEARS.between(birthdate, currentDate);
 
         if (carOwnerAge < 18) {
             throw new ValidationException("Car owner should be older than 18");

@@ -1,24 +1,24 @@
-package ru.shuralev.carservice.service.impl;
+package ru.shuralev.carservice.app.impl.statistics;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.shuralev.carservice.adapter.rest.dto.Statistics;
-import ru.shuralev.carservice.domain.Car;
-import ru.shuralev.carservice.repository.CarRepository;
-import ru.shuralev.carservice.repository.PersonRepository;
-import ru.shuralev.carservice.service.StatisticService;
+import ru.shuralev.carservice.adapter.rest.statistics.dto.Statistics;
+import ru.shuralev.carservice.domain.car.Car;
+import ru.shuralev.carservice.app.api.car.CarRepository;
+import ru.shuralev.carservice.app.api.person.PersonRepository;
+import ru.shuralev.carservice.app.api.statistics.GetStatistics;
 
 @Component
 @RequiredArgsConstructor
-public class StatisticServiceImpl implements StatisticService {
+public class GetStatisticsImpl implements GetStatistics {
 
     private final CarRepository carRepository;
     private final PersonRepository personRepository;
 
     @Transactional(readOnly = true)
     @Override
-    public Statistics getStatistics() {
+    public Statistics execute() {
         Long countOfPeople = getCountOfPeople();
         Long countOfCars = getCountOfCars();
         Long countOfUniqueVendors = getCountOfUniqueVendors();
