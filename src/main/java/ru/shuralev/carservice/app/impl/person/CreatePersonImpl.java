@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shuralev.carservice.app.api.person.CreatePerson;
-import ru.shuralev.carservice.validation.ValidationException;
+import ru.shuralev.carservice.app.api.ValidationException;
 import ru.shuralev.carservice.domain.person.Person;
 import ru.shuralev.carservice.app.api.person.PersonRepository;
-import ru.shuralev.carservice.validation.DateValidator;
 
 import java.time.LocalDate;
 
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class CreatePersonImpl implements CreatePerson {
     private final PersonRepository personRepository;
-    private final DateValidator dateValidator;
 
     @Transactional
     @Override
@@ -34,10 +32,6 @@ public class CreatePersonImpl implements CreatePerson {
     // ===================================================================================================================
 
     private void validatePersonBirthdate(LocalDate personBirthdate) {
-        if (!dateValidator.isValidFormat(personBirthdate)) {
-            throw new ValidationException("Invalid date format");
-        }
-
         LocalDate currentDate = LocalDate.now();
         if (!personBirthdate.isBefore(currentDate)) {
             throw new ValidationException("Person's birthdate should be in a past");

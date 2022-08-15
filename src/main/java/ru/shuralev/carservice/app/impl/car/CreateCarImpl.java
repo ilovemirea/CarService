@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shuralev.carservice.domain.person.Person;
 import ru.shuralev.carservice.app.api.car.CreateCar;
-import ru.shuralev.carservice.validation.ValidationException;
+import ru.shuralev.carservice.app.api.ValidationException;
 import ru.shuralev.carservice.domain.car.Car;
 import ru.shuralev.carservice.app.api.car.CarRepository;
 import ru.shuralev.carservice.app.api.person.PersonRepository;

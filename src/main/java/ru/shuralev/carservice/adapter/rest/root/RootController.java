@@ -1,10 +1,10 @@
-package ru.shuralev.carservice.adapter.rest;
+package ru.shuralev.carservice.adapter.rest.root;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shuralev.carservice.app.api.DeleteAllPeopleAndCars;
+import ru.shuralev.carservice.app.api.root.DeleteAllPeopleAndCars;
 
 @RestController
 @RequiredArgsConstructor

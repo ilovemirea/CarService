@@ -1,4 +1,4 @@
-package ru.shuralev.carservice.validation;
+package ru.shuralev.carservice.app.api;
 
 import java.io.Serial;
 
