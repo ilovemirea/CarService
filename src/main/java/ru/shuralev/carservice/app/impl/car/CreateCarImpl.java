@@ -9,6 +9,7 @@ import ru.shuralev.carservice.app.api.ValidationException;
 import ru.shuralev.carservice.domain.car.Car;
 import ru.shuralev.carservice.app.api.car.CarRepository;
 import ru.shuralev.carservice.app.api.person.PersonRepository;
+import ru.shuralev.carservice.utility.validator.CarModelValidator;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
@@ -19,20 +20,23 @@ import java.time.temporal.ChronoUnit;
 public class CreateCarImpl implements CreateCar {
     private final CarRepository carRepository;
     private final PersonRepository personRepository;
+    private final CarModelValidator carModelValidator;
 
     @Transactional
     @Override
     public void execute(Car car) {
         Long carId = car.getId();
-        Long ownerId = car.getPerson().getId();
-        Person carOwner = personRepository.findById(ownerId)
+        Long carOwnerId = car.getPerson().getId();
+        Person carOwner = personRepository.findById(carOwnerId)
                 .orElseThrow(() -> new EntityNotFoundException("Could not find provided Person by id in the database"));
         LocalDate carOwnerBirthdate = carOwner.getBirthdate();
-        Integer horsepower = car.getHorsepower();
+        Integer carHorsepower = car.getHorsepower();
+        String carModel = car.getModel();
 
+        validateCarModel(carModel);
         validateCarOwnerAge(carOwnerBirthdate);
-        validateCarHorsepower(horsepower);
-        validateCarOwnerId(ownerId);
+        validateCarHorsepower(carHorsepower);
+        validateCarOwnerId(carOwnerId);
         validateCarId(carId);
 
         carRepository.save(car);
@@ -41,6 +45,12 @@ public class CreateCarImpl implements CreateCar {
     // ===================================================================================================================
     // = Implementation
     // ===================================================================================================================
+
+    private void validateCarModel(String carModel) {
+        if(!carModelValidator.isValid(carModel)){
+            throw new ValidationException("Model should be in 'vendor-model' format");
+        }
+    }
 
     private void validateCarHorsepower(Integer horsepower) {
         if (horsepower <= 0) {

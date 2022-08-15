@@ -1,6 +1,5 @@
 package ru.shuralev.carservice.adapter.rest.statistics.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

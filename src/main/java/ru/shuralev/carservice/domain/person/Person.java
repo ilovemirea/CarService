@@ -10,13 +10,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.shuralev.carservice.domain.car.Car;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-public class Person implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -5449326074498337967L;
-
+public class Person {
     @Id
     private Long id;
 
@@ -37,14 +33,14 @@ public class Person implements Serializable {
     private String name;
 
     @NotNull
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthdate;
 
     @OneToMany(mappedBy = "person",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+            fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Car> cars = new ArrayList<>();
 }

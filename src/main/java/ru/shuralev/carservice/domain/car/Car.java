@@ -7,17 +7,12 @@ import ru.shuralev.carservice.domain.person.Person;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serial;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "CAR")
 @Getter
 @Setter
-public class Car implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -5449326074498337967L;
-
+public class Car {
     @Id
     private Long id;
     @NotNull
@@ -28,7 +23,6 @@ public class Car implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     @JsonBackReference
-    @NotNull
     private Person person;
 
     public Car() {
